@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Patch } from '@nestjs/common';
 
 import type { Foto } from './entities/foto.entity.js';
 
@@ -26,5 +26,18 @@ create(datos: Omit<Foto, 'id'>): Foto {
     this.fotos.push(nueva);
     return nueva;
     }
+
+update (id: number, datos: Partial< Omit<Foto, 'id'>>) : Foto {
+    const foto = this.findOne(id);
+    Object.assign(foto, datos);
+    return foto;
+}
+
+remove(id: number): void {
+    this.findOne(id);
+    this.fotos = this.fotos.filter((f) => f.id !== id)
+}
+
+
 }
 
