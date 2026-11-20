@@ -24,14 +24,13 @@ export class FotosController {
     }
 
     @Patch(':id')
-    update(@Param('id', ParseIntPipe) id: number, @Body() datos: Partial<Omit<Foto, 'id'>>){
-        return this.fotosService.update(id, datos);
+    update(@Param('id', ParseIntPipe) id: number, @Body() cambios: Partial<Omit<Foto, 'id'>>,) {
+        return this.fotosService.update(id, cambios);
     }
 
     @Delete(':id')
     @HttpCode(204)
-    remove(@Param('id', ParseIntPipe) id: number){
-        this.fotosService.remove(id);
+    remove(@Param('id', ParseIntPipe) id: number) {
+        return this.fotosService.remove(id);
     }
-
 }
