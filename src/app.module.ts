@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import {ConfigModule, ConfigService} from '@nestjs/config';
 import { FotosModule } from './fotos/fotos.module.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AlbumesModule } from './albumes/albumes.module.js';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       }),
     }),
     FotosModule,
+    AlbumesModule,
   ],
 })
 
