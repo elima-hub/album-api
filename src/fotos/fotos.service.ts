@@ -3,8 +3,10 @@ import { Foto } from './entities/foto.entity.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import {Between, ILike, Repository} from 'typeorm';
 
+export enum Orden { ASC = 'asc', DESC = 'desc'}
+
 export interface FiltroFotos{
-    min: number; max: number; q?:string; page: number; limit: number;
+    min: number; max: number; q?:string; etiqueta?:string; page: number; limit: number; orden: Orden | undefined;
 }
 
 @Injectable()
@@ -15,11 +17,11 @@ export class FotosService {
     ){}
 
 
-async findAll({ min, max, q, page, limit} : FiltroFotos){
+async findAll({ min, max, q, etiqueta, page, limit, orden} : FiltroFotos){
     const [data, total] = await this.fotosRepo.findAndCount({
-        where: {calificacion: Between(min, max),...(q && { titulo: ILike(`%${q}%`)}),},
-        relations: { etiquetas: true},
-        order: { id: 'ASC'},
+        where: {calificacion: Between(min, max),...(q && { titulo: ILike(`%${q}%`)}),...(etiqueta && {etiquetas: { texto: etiqueta }})},
+        relations: { etiquetas: true, album:true},
+        order: orden ? { calificacion: orden, id: 'ASC'} : { id:'ASC'},
         skip: (page - 1) * limit,
         take: limit,
     });
