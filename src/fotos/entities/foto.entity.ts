@@ -1,4 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from "typeorm";
+import { Album } from "../../albumes/entities/album.entity.js";
+import { Etiqueta } from "./etiqueta.entity.js";
+import { ManyToOne } from "typeorm";
 
 @Entity('fotos')
 export class Foto {
@@ -19,6 +22,21 @@ export class Foto {
 
     @Column()
     ruta: string;
+
+    @ManyToOne (() => Album, (album) => album.fotos,{
+        onDelete: 'SET NULL',
+        nullable: true,
+    })
+    album: Album | null;
+
+    @ManyToMany(() => Etiqueta, (etiqueta) => etiqueta.fotos)
+    @JoinTable({
+        name: 'fotos_etiquetas',
+        joinColumn: {name: 'foto_id'},
+        inverseJoinColumn: { name: 'etiqueta_id'},
+    })
+    etiquetas: Etiqueta[];
+
     
     @CreateDateColumn()
     creadoEn: Date;
