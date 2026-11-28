@@ -1,5 +1,7 @@
-import { Controller, Get, ParseIntPipe, Param } from '@nestjs/common';
+import { Controller, Get, ParseIntPipe, Param, Patch, Post, Delete, HttpCode, Body} from '@nestjs/common';
 import { AlbumesService } from './albumes.service.js';
+import { CreateAlbumDto } from './dto/create-album.dto.js';
+import { UpdateAlbumDto } from './dto/update-album.dto.js';
 
 @Controller('albumes')
 export class AlbumesController {
@@ -15,4 +17,19 @@ export class AlbumesController {
         return this.albumesService.findFotos(id);
     }
 
+    @Post()
+    create(@Body() dto: CreateAlbumDto) {
+    return this.albumesService.create(dto);
+    }
+
+    @Patch(':id')
+    update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateAlbumDto) {
+        return this.albumesService.update(id, dto);
+    }
+
+    @Delete(':id')
+    @HttpCode(204)
+    remove(@Param('id', ParseIntPipe) id: number) {
+    return this.albumesService.remove(id);
+    }
 }
